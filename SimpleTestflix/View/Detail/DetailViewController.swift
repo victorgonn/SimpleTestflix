@@ -92,6 +92,7 @@ public class DetailViewController: UIViewController {
         navigationController?.navigationBar.barTintColor = .black
         navigationController?.navigationBar.tintColor = .white
         navigationController?.navigationBar.isTranslucent = true
+        navigationController?.navigationBar.barStyle = .black
     }
     
     func setupView(){

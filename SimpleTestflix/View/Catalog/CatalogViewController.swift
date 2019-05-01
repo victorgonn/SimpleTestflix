@@ -14,6 +14,12 @@ class CatalogViewController: UITableViewController {
     var genders: Genders = Genders()
     var movies: Movies = Movies()
     
+    let dataFormat: DateFormatter = {
+        let df = DateFormatter()
+        df.dateFormat = "dd/MM/YYYY"
+        return df
+    }()
+    
     public var sortByDate: Bool = false {
         didSet{
             let sortButton = UIBarButtonItem(barButtonSystemItem: self.sortByDate ? .rewind : .fastForward, target: self, action: #selector(sort))
@@ -78,6 +84,7 @@ class CatalogViewController: UITableViewController {
         navigationItem.titleView = logo
         navigationController?.navigationBar.barTintColor = .black
         navigationController?.navigationBar.isTranslucent = true
+         navigationController?.navigationBar.barStyle = .black
         
         let sortButton = UIBarButtonItem(barButtonSystemItem: self.sortByDate ? .rewind : .fastForward, target: self, action: #selector(sort))
         sortButton.tintColor = .white
@@ -89,7 +96,7 @@ class CatalogViewController: UITableViewController {
         tableView.register(MovieTableViewCell.self, forCellReuseIdentifier: cellId)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 200
-        //tableView.backgroundColor = .darkGray
+        tableView.backgroundColor = .darkGray
         tableView.separatorStyle = .none
         
         //Table Header
@@ -185,7 +192,7 @@ extension CatalogViewController {
     
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let width: CGFloat = tableView.frame.width * 0.4 // 40% da largura da tela
+        let width: CGFloat = tableView.frame.width * 0.5 // 50% da largura da tela
         return width * (3/4)  // aspectio ratio
     }
     
@@ -197,8 +204,23 @@ extension CatalogViewController {
             sbv.removeFromSuperview()
         }
         
-        cell.backgroundColor = .black
-        cell.movie = self.movies.values![indexPath.section]
+        cell.backgroundColor = .darkGray
+
+        if(self.movies.values != nil &&
+            indexPath.section <= self.movies.values!.count){
+            let selectedMovie = self.movies.values![indexPath.section]
+            
+            
+            let url = selectedMovie.posterPath != nil ? "https://image.tmdb.org/t/p/w185" + selectedMovie.posterPath! : ""
+            if let imgUrl = URL(string: url) {
+                cell.movieImgView.load(url: imgUrl)
+            }
+            
+            cell.originalTitleTextView.text = selectedMovie.originalTitle != nil ? selectedMovie.originalTitle : ""
+            cell.dateTextView.text = selectedMovie.rDate != nil ? dataFormat.string(from: selectedMovie.rDate!) : "NA"
+            cell.genderTextView.text = selectedMovie.rGender != nil ? selectedMovie.rGender!.joined(separator: ", ") : "NA"
+        }
+        
         return cell
     }
     
