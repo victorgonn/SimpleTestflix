@@ -120,11 +120,12 @@ public class DetailViewController: UIViewController {
     
     private func setupLayout(){
         let width = view.frame.width
-        let height = view.frame.height
+        //let height = view.frame.height
         
         movieLogoImgView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        movieLogoImgView.topAnchor.constraint(equalTo: view.topAnchor, constant: 90).isActive = true
         movieLogoImgView.widthAnchor.constraint(equalToConstant: width).isActive = true
-        movieLogoImgView.heightAnchor.constraint(equalToConstant: (height/2.6)).isActive = true
+        movieLogoImgView.heightAnchor.constraint(equalToConstant: (width * (9/16))).isActive = true
         
         nameTextView.topAnchor.constraint(equalTo: movieLogoImgView.bottomAnchor, constant: 10).isActive = true
         nameTextView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
