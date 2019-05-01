@@ -17,7 +17,7 @@ public class DetailViewController: UIViewController {
         let imgView = UIImageView()
         imgView.contentMode = UIView.ContentMode.scaleToFill
         imgView.clipsToBounds =  true
-        imgView.backgroundColor = .red
+        imgView.backgroundColor = .black
         imgView.translatesAutoresizingMaskIntoConstraints = false
         return imgView
     }()
@@ -102,7 +102,7 @@ public class DetailViewController: UIViewController {
         view.addSubview(genderTextView)
         view.addSubview(overviewTextView)
         
-        let url = movie!.posterPath != nil ? "https://image.tmdb.org/t/p/w185" + movie!.backDropPath! : ""
+        let url = movie!.backDropPath != nil ? "https://image.tmdb.org/t/p/w185" + movie!.backDropPath! : ""
         if let imgUrl = URL(string: url) {
             movieLogoImgView.load(url: imgUrl)
         }
