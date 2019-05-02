@@ -183,11 +183,33 @@ extension CatalogViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 30
+        return 20
     }
     
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return self.movies.values?[section].title ?? "Filme " + String(section)
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.size.width, height: 20))
+        headerView.backgroundColor = .darkGray
+        
+        
+        if(self.movies.values != nil &&
+            section <= self.movies.values!.count){
+            let selectedMovie = self.movies.values![section]
+            
+            let labelTxt = UILabel(frame: .zero)
+            labelTxt.textColor = .white
+            labelTxt.font = UIFont.boldSystemFont(ofSize: 16)
+            labelTxt.translatesAutoresizingMaskIntoConstraints = false
+            labelTxt.textAlignment = .justified
+            labelTxt.text = selectedMovie.title != nil ? selectedMovie.title : "Filme " + String(section)
+            
+            headerView.addSubview(labelTxt)
+            
+            labelTxt.bottomAnchor.constraint(equalTo: headerView.bottomAnchor, constant: -4).isActive = true
+            labelTxt.leftAnchor.constraint(equalTo: headerView.leftAnchor, constant: 8).isActive = true
+            labelTxt.rightAnchor.constraint(equalTo: headerView.rightAnchor, constant: -8).isActive = true
+        }
+        
+        return headerView
     }
     
     

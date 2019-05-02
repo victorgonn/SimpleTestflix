@@ -21,42 +21,39 @@ public class MovieTableViewCell: UITableViewCell{
         return imgView
     }()
     
-    let originalTitleTextView: UITextView = {
-        let textView = UITextView()
+    let originalTitleTextView: UILabel = {
+        let textView = UILabel()
         textView.text = "title"
         textView.textColor = .white
         textView.backgroundColor = .darkGray
         textView.font = UIFont.boldSystemFont(ofSize: 16)
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.textAlignment = .justified
-        textView.isEditable = false
-        textView.isScrollEnabled = false
+        textView.numberOfLines = 0
         return textView
     }()
     
-    let dateTextView: UITextView = {
-        let textView = UITextView()
+    let dateTextView: UILabel = {
+        let textView = UILabel()
         textView.text = "data"
         textView.textColor = .white
         textView.backgroundColor = .darkGray
         textView.font = UIFont.boldSystemFont(ofSize: 16)
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.textAlignment = .justified
-        textView.isEditable = false
-        textView.isScrollEnabled = false
+        textView.numberOfLines = 0
         return textView
     }()
     
-    let genderTextView: UITextView = {
-        let textView = UITextView()
+    let genderTextView: UILabel = {
+        let textView = UILabel()
         textView.text = "genero"
         textView.textColor = .white
         textView.backgroundColor = .darkGray
         textView.font = UIFont.boldSystemFont(ofSize: 16)
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.textAlignment = .justified
-        textView.isEditable = false
-        textView.isScrollEnabled = false
+        textView.numberOfLines = 0
         return textView
     }()
     
@@ -85,7 +82,7 @@ public class MovieTableViewCell: UITableViewCell{
         
         movieImgView.topAnchor.constraint(equalTo: self.topAnchor, constant: 0).isActive = true
         movieImgView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0).isActive = true
-        movieImgView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 0).isActive = true
+        movieImgView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 8).isActive = true
         movieImgView.widthAnchor.constraint(equalToConstant: ((width * 0.6) * (9/16))).isActive = true
         
         originalTitleTextView.topAnchor.constraint(equalTo: self.topAnchor, constant: 10).isActive = true
@@ -101,18 +98,4 @@ public class MovieTableViewCell: UITableViewCell{
         genderTextView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -8).isActive = true
     }
     
-}
-
-extension UIImageView {
-    func load(url: URL) {
-        DispatchQueue.global().async { [weak self] in
-            if let data = try? Data(contentsOf: url) {
-                if let image = UIImage(data: data) {
-                    DispatchQueue.main.async {
-                        self?.image = image
-                    }
-                }
-            }
-        }
-    }
 }
