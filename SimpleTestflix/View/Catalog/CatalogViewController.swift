@@ -231,11 +231,6 @@ extension CatalogViewController {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId) as! MovieTableViewCell
         
-        //Limpando antes de reusar
-        cell.contentView.subviews.forEach { (sbv) in
-            sbv.removeFromSuperview()
-        }
-        
         cell.backgroundColor = .darkGray
         cell.selectionStyle = UITableViewCell.SelectionStyle.none
 
@@ -252,6 +247,7 @@ extension CatalogViewController {
             cell.originalTitleTextView.text = selectedMovie.originalTitle != nil ? selectedMovie.originalTitle : ""
             cell.dateTextView.text = selectedMovie.rDate != nil ? dataFormat.string(from: selectedMovie.rDate!) : "NA"
             cell.genderTextView.text = selectedMovie.rGender != nil ? selectedMovie.rGender!.joined(separator: ", ") : "NA"
+            cell.isFavorited = false
         }
         
         return cell

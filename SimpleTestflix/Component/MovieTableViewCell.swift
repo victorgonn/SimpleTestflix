@@ -57,7 +57,12 @@ public class MovieTableViewCell: UITableViewCell{
         return textView
     }()
     
-    public var isFavorited: Bool = false
+    public var isFavorited: Bool = false {
+        didSet{
+            let img = isFavorited == true ? UIImage(named: "favorit") : UIImage(named: "!favorit")
+            favoritButton.setImage(img, for: UIControl.State.normal)
+        }
+    }
     
     let favoritButton: UIButton = {
         let fbutton = UIButton.init(type: .custom)
