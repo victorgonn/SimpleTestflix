@@ -57,6 +57,13 @@ public class MovieTableViewCell: UITableViewCell{
         return textView
     }()
     
+    public var isFavorited: Bool = false
+    
+    let favoritButton: UIButton = {
+        let fbutton = UIButton.init(type: .custom)
+        return fbutton
+    }()
+    
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -73,6 +80,7 @@ public class MovieTableViewCell: UITableViewCell{
         addSubview(originalTitleTextView)
         addSubview(dateTextView)
         addSubview(genderTextView)
+        addSubview(favoritButton)
         
         setupLayout()
     }
@@ -85,7 +93,12 @@ public class MovieTableViewCell: UITableViewCell{
         movieImgView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 8).isActive = true
         movieImgView.widthAnchor.constraint(equalToConstant: ((width * 0.6) * (9/16))).isActive = true
         
-        originalTitleTextView.topAnchor.constraint(equalTo: self.topAnchor, constant: 10).isActive = true
+        let img = isFavorited == true ? UIImage(named: "favorit") : UIImage(named: "!favorit")
+        favoritButton.frame = CGRect(x: ((width * 0.6) * (9/16) + 20), y: 0, width: 20, height: 20)
+        favoritButton.setImage(img, for: UIControl.State.normal)
+        favoritButton.addTarget(self, action: #selector(fbuttonClicked(_ :)), for: .touchUpInside)
+        
+        originalTitleTextView.topAnchor.constraint(equalTo: favoritButton.bottomAnchor, constant: 10).isActive = true
         originalTitleTextView.leftAnchor.constraint(equalTo: movieImgView.rightAnchor, constant: 10).isActive = true
         originalTitleTextView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -8).isActive = true
         
@@ -98,4 +111,9 @@ public class MovieTableViewCell: UITableViewCell{
         genderTextView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -8).isActive = true
     }
     
+    @objc func fbuttonClicked(_ : UIButton){        
+        isFavorited = !isFavorited
+        let img = isFavorited == true ? UIImage(named: "favorit") : UIImage(named: "!favorit")
+        favoritButton.setImage(img, for: UIControl.State.normal)
+    }
 }
