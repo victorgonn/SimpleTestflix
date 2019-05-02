@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         window = UIWindow(frame: UIScreen.main.bounds)
         
-        let catalogView = CatalogViewController(style: UITableView.Style.grouped)
+        let catalogView = CatalogViewController()
         let rootNavigationView = UINavigationController(rootViewController: catalogView)
         
         window?.rootViewController = rootNavigationView

@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class CatalogViewController: UITableViewController {
+class CatalogViewController:  UIViewController, UITableViewDelegate, UITableViewDataSource {
     let cellId = "cellId"
     var genders: Genders = Genders()
     var movies: Movies = Movies()
@@ -18,6 +18,15 @@ class CatalogViewController: UITableViewController {
         let df = DateFormatter()
         df.dateFormat = "dd/MM/YYYY"
         return df
+    }()
+    
+    let tableVIew: UITableView = {
+        let tableView = UITableView(frame: .zero, style: UITableView.Style.grouped)
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 200
+        tableView.backgroundColor = .darkGray
+        tableView.separatorStyle = .none
+        return tableView
     }()
     
     public var sortByDate: Bool = false {
@@ -37,7 +46,7 @@ class CatalogViewController: UITableViewController {
             
             DispatchQueue.main.async {
                 self.loadView.removeFromSuperview()
-                self.tableView?.reloadData()
+                self.tableVIew.reloadData()
             }
         }
     }
@@ -92,14 +101,16 @@ class CatalogViewController: UITableViewController {
     }
     
     private func setupCatalogTable(){
-        //tableView
-        tableView.register(MovieTableViewCell.self, forCellReuseIdentifier: cellId)
-        tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 200
-        tableView.backgroundColor = .darkGray
-        tableView.separatorStyle = .none
+        //view
+        view.backgroundColor = .darkGray
         
-        //Table Header
+        //tableView
+        tableVIew.delegate = self
+        tableVIew.dataSource = self
+        tableVIew.register(MovieTableViewCell.self, forCellReuseIdentifier: cellId)
+        view.addSubview(tableVIew)
+        view.constraint(pattern: "H:|[v0]|", views: tableVIew) //Alinhamento Horizontal para loadView
+        view.constraint(pattern: "V:|-100-[v0]|", views: tableVIew) //Alinhamento Vertical para loadView
     }
     
     
@@ -162,7 +173,7 @@ class CatalogViewController: UITableViewController {
         self.sortByDate = !self.sortByDate
         self.movies.sortByDate(asc: self.sortByDate)
         DispatchQueue.main.async {
-            self.tableView?.reloadData()
+            self.tableVIew.reloadData()
         }
     }
 
@@ -174,22 +185,21 @@ class CatalogViewController: UITableViewController {
 //Extensao responsavel pela Tabela da tela Inicial
 extension CatalogViewController {
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return self.movies.values?.count ?? 0
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
     
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 20
     }
     
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.size.width, height: 20))
         headerView.backgroundColor = .darkGray
-        
         
         if(self.movies.values != nil &&
             section <= self.movies.values!.count){
@@ -213,12 +223,12 @@ extension CatalogViewController {
     }
     
     
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let width: CGFloat = tableView.frame.width * 0.5 // 50% da largura da tela
         return width * (3/4)  // aspectio ratio
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId) as! MovieTableViewCell
         
         //Limpando antes de reusar
@@ -227,6 +237,7 @@ extension CatalogViewController {
         }
         
         cell.backgroundColor = .darkGray
+        cell.selectionStyle = UITableViewCell.SelectionStyle.none
 
         if(self.movies.values != nil &&
             indexPath.section <= self.movies.values!.count){
@@ -246,7 +257,7 @@ extension CatalogViewController {
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detailVC = DetailViewController()
         detailVC.movie = self.movies.values![indexPath.section]
         self.navigationController?.pushViewController(detailVC, animated: false)
